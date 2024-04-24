@@ -1,0 +1,6 @@
+.result ul {
+    list-style-type: none;
+}
+.result ul li {
+    background: beige;
+}
