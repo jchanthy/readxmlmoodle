@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 const FileUploader = ({ onFileUpload }) => {
     const [dragging, setDragging] = useState(false);
     const [questions, setQuestions] = useState([]);
-    const [progress, setProcess] = useState(0);
 
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -81,7 +80,6 @@ const FileUploader = ({ onFileUpload }) => {
                 <label htmlFor="file-input">
                     {dragging ? 'Drop the file here' : 'Drag and drop or click to upload XML file'}
                 </label>
-                {progress > 0 && onLoading()}
             </div>
             <div className="result">
                 {questions.map((question, index) => (
@@ -99,11 +97,5 @@ const FileUploader = ({ onFileUpload }) => {
         </>
     );
 };
-
-const onLoading = () => {
-  <Box sx={{ width: '100%' }}>
-        <LinearProgress />
-    </Box>
-}
 
 export default FileUploader;
