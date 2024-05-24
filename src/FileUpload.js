@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const FileUploader = ({ onFileUpload }) => {
+    const [questions, setQuestions] = useState([]) ;
     const handleFileInput = (e) => {
         const file = e.target.files[0];
         handleFile(file);
@@ -18,7 +19,6 @@ const FileUploader = ({ onFileUpload }) => {
             onFileUpload(xmlString);
         };
         reader.readAsText(file);
-
     };
 
     return (
@@ -32,7 +32,17 @@ const FileUploader = ({ onFileUpload }) => {
             />
 
             <div className={'result'}>
-
+                {questions.map((question, index) => (
+                    <div key={index}>
+                        <h3>{question.name}</h3>
+                        <div dangerouslySetInnerHTML={{ __html: question.questiontext }} />
+                        <ul>
+                            {question.tags.map((tag, id) => (
+                                <li key={id}>{tag.text || tag}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
             </div>
         </>
     );
