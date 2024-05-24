@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const FileUploader = ({ onFileUpload }) => {
+    const [questions, setQuestions] = useState([]) ;
     const handleFileInput = (e) => {
         const file = e.target.files[0];
         handleFile(file);
@@ -18,21 +19,43 @@ const FileUploader = ({ onFileUpload }) => {
             onFileUpload(xmlString);
         };
         reader.readAsText(file);
-
     };
+    const parseXml = (xmlString) => {
+        const parser = new XMLParser();
+        const result = parser.parse(xmlString);
 
+        // Extracting relevant data from parsed XML
+        const extractedQuestions = result.quiz.question.map((q) => ({
+            name: q.name?.text || '',
+            questiontext: q.questiontext?.text || '',
+            tags: q.tags?.tag || []
+        }));
+
+        setQuestions(extractedQuestions);
+        onFileUpload(extractedQuestions);
+    };
     return (
         <>
 
             <input
                 type="file"
-                accept=".xml"
+                accept="text/xml"
                 onChange={handleFileInput}
                 style={{ display: 'block' }}
             />
 
             <div className={'result'}>
-
+                {questions.map((question, index) => (
+                    <div key={index}>
+                        <h3>{question.name}</h3>
+                        <div dangerouslySetInnerHTML={{ __html: question.questiontext }} />
+                        <ul>
+                            {question.tags.map((tag, id) => (
+                                <li key={id}>{tag.text || tag}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
             </div>
         </>
     );
