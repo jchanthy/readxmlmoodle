@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { XMLParse} from 'fast-xml-parser';
 
 const FileUploader = ({ onFileUpload }) => {
     const [questions, setQuestions] = useState([]) ;
@@ -16,7 +17,7 @@ const FileUploader = ({ onFileUpload }) => {
         const reader = new FileReader();
         reader.onload = (event) => {
             const xmlString = event.target.result;
-            onFileUpload(xmlString);
+            parseXml(xmlString);
         };
         reader.readAsText(file);
     };
