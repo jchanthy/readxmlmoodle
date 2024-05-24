@@ -4,9 +4,11 @@ import FileUploader from './FileUpload'; // Assuming you have the FileUploader c
 const App = () => {
     const handleFileUpload = () => {};
     return (
-        <div>
+        <>
             <FileUploader onFileUpload={handleFileUpload} />
-        </div>
+
+</>
+    
     );
 };
 
