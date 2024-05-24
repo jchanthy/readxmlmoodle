@@ -1,8 +1,30 @@
 import React, { useState } from 'react';
-import { XMLParse} from 'fast-xml-parser';
+import { XMLParser } from 'fast-xml-parser';
 
 const FileUploader = ({ onFileUpload }) => {
-    const [questions, setQuestions] = useState([]) ;
+    const [dragging, setDragging] = useState(false);
+    const [questions, setQuestions] = useState([]);
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragging(true);
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragging(false);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragging(false);
+        const file = e.dataTransfer.files[0];
+        handleFile(file);
+    };
+
     const handleFileInput = (e) => {
         const file = e.target.files[0];
         handleFile(file);
@@ -21,6 +43,7 @@ const FileUploader = ({ onFileUpload }) => {
         };
         reader.readAsText(file);
     };
+
     const parseXml = (xmlString) => {
         const parser = new XMLParser();
         const result = parser.parse(xmlString);
@@ -35,17 +58,27 @@ const FileUploader = ({ onFileUpload }) => {
         setQuestions(extractedQuestions);
         onFileUpload(extractedQuestions);
     };
+
     return (
         <>
-
-            <input
-                type="file"
-                accept="text/xml"
-                onChange={handleFileInput}
-                style={{ display: 'block' }}
-            />
-
-            <div className={'result'}>
+            <div
+                className={`file-uploader ${dragging ? 'dragging' : ''}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+            >
+                <input
+                    type="file"
+                    accept=".xml"
+                    onChange={handleFileInput}
+                    style={{ display: 'none' }}
+                    id="file-input"
+                />
+                <label htmlFor="file-input">
+                    {dragging ? 'Drop the file here' : 'Drag and drop or click to upload XML file'}
+                </label>
+            </div>
+            <div className="result">
                 {questions.map((question, index) => (
                     <div key={index}>
                         <h3>{question.name}</h3>
