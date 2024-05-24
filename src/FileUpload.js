@@ -52,6 +52,7 @@ const FileUploader = ({ onFileUpload }) => {
         const extractedQuestions = result.quiz.question.map((q) => ({
             name: q.name?.text || '',
             questiontext: q.questiontext?.text || '',
+
             tags: Array.isArray(q.tags?.tag) ? q.tags?.tag : []
         }));
 
