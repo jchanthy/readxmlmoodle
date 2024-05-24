@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { XMLParser } from 'fast-xml-parser';
-import {LinearProgress} from "@mui/material";
-import Box from "@mui/material/Box";
 
 const FileUploader = ({ onFileUpload }) => {
     const [dragging, setDragging] = useState(false);
