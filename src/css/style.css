@@ -1,6 +1,3 @@
-.result ul {
-    list-style-type: none;
-}
-.result ul li {
-    background: beige;
+:root {
+    font-family: "Noto Sans Khmer", "Noto Sans Khmer UI", arial, sans-serif;
 }
