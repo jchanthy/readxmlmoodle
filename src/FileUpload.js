@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
 import { XMLParser } from 'fast-xml-parser';
+import Stack from "@mui/material/Stack";
+import {Fade} from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Typography from "@mui/material/Typography";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Chip from "@mui/material/Chip";
+
 
 const FileUploader = ({ onFileUpload }) => {
     const [dragging, setDragging] = useState(false);
@@ -60,6 +69,17 @@ const FileUploader = ({ onFileUpload }) => {
         onFileUpload(extractedQuestions);
     };
 
+    const [expanded, setExpanded] = useState(Array(questions.length).fill(false));
+
+    const handleExpansion = (panel) => (event, isExpanded) => {
+        setExpanded((prevExpanded) => {
+            const newExpanded = [...prevExpanded];
+            newExpanded.fill(false); // Reset all to false
+            newExpanded[panel] = isExpanded; // Set clicked item to true
+            return newExpanded;
+        });
+    };
+    const handleDelete = () => {};
     return (
         <>
             <div
@@ -72,24 +92,48 @@ const FileUploader = ({ onFileUpload }) => {
                     type="file"
                     accept=".xml"
                     onChange={handleFileInput}
-                    style={{ display: 'none' }}
+                    style={{display: 'none'}}
                     id="file-input"
                 />
                 <label htmlFor="file-input">
                     {dragging ? 'Drop the file here' : 'Drag and drop or click to upload XML file'}
                 </label>
             </div>
-            <div className="result">
+
+
+            <div>
                 {questions.map((question, index) => (
-                    <div key={index}>
-                        <h3>{question.name}</h3>
-                        <div dangerouslySetInnerHTML={{ __html: question.questiontext }} />
-                        <ul>
-                            {question.tags.map((tag, id) => (
-                                <li key={id}>{tag.text || tag}</li>
-                            ))}
-                        </ul>
-                    </div>
+                <Accordion
+                    key={index}
+                    expanded={expanded[index]}
+                    onChange={handleExpansion(index)}
+                    slots={{transition: Fade}}
+                    slotProps={{transition: {timeout: 400}}}
+                    sx={{
+                        '& .MuiAccordion-region': {height: expanded ? 'auto' : 0},
+                        '& .MuiAccordionDetails-root': {display: expanded ? 'block' : 'none'},
+                    }}
+                >
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls={`panel${index + 1}-content`}
+                        id={`panel${1}-header`}
+                    >
+                        <Typography variant="body1" component="div" dangerouslySetInnerHTML={{ __html: question.questiontext }} />
+
+                    </AccordionSummary>
+                    <AccordionDetails>
+
+                            <Typography>
+                                <Stack direction="row" spacing={1}>
+                                    {question.tags.map((tag, id) => (
+                                        <Chip key={id} label={tag.text || tag} color="success" onDelete={handleDelete}/>
+                                    ))}
+                                </Stack>
+                            </Typography>
+
+                        </AccordionDetails>
+                    </Accordion>
                 ))}
             </div>
         </>

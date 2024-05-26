@@ -7,9 +7,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
-import Hero from './components/Hero';
 import getLPTheme from './getLPTheme';
 import ToggleColorMode from "./components/ToggleColorMode";
+import FileUploader from "./FileUpload";
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -55,13 +55,14 @@ ToggleCustomTheme.propTypes = {
 
 export default function LandingPage() {
   const [mode, setMode] = React.useState('light');
-  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
+  const [showCustomTheme, ] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
   const toggleColorMode = () => {
     setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
+  const handleFileUpload = () =>{};
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
@@ -74,9 +75,7 @@ export default function LandingPage() {
         >
             <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
         </Box>
-        <Hero>
-
-        </Hero>
+        <FileUploader onFileUpload={handleFileUpload}/>
     </ThemeProvider>
   );
 }
